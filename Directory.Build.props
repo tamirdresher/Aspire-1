@@ -17,6 +17,11 @@
     <AspNetCoreVersion>9.0.0</AspNetCoreVersion>
     <DotNetExtensionsVersion>10.0.5</DotNetExtensionsVersion>
     <OpenTelemetryVersion>1.15.3</OpenTelemetryVersion>
+    <!-- Instrumentation packages release on a slower cadence than core OTel.
+         Pin each to its actual latest to avoid NU1102 restore failures. -->
+    <OpenTelemetryInstrumentationAspNetCoreVersion>1.15.2</OpenTelemetryInstrumentationAspNetCoreVersion>
+    <OpenTelemetryInstrumentationHttpVersion>1.15.1</OpenTelemetryInstrumentationHttpVersion>
+    <OpenTelemetryInstrumentationRuntimeVersion>1.15.1</OpenTelemetryInstrumentationRuntimeVersion>
     <TestContainersVersion>4.8.1</TestContainersVersion>
     <MEAIVersion>10.0.0</MEAIVersion>
     <ServiceDiscoveryVersion>10.0.0</ServiceDiscoveryVersion>
