@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>CommunityToolkit Aspire Hosting integration for Squad — registers a Squad multi-agent team as an Aspire resource that emits a Hybrid PATH+URI connection string consumable by Squad.Agents.AI.</Description>
+    <AdditionalPackageTags>aspire;squad;multi-agent;agent-framework</AdditionalPackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="CommunityToolkit.Aspire.Hosting.Squad.Tests"></InternalsVisibleTo>
+  </ItemGroup>
+</Project>
