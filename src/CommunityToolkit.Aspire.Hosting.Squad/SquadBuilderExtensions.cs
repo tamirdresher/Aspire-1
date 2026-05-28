@@ -2,6 +2,7 @@ using Aspire.Hosting.ApplicationModel;
 using Aspire.Hosting.Lifecycle;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Aspire.Hosting;
 
@@ -191,6 +192,8 @@ public static class SquadBuilderExtensions
     /// <param name="builder">The <see cref="IResourceBuilder{SquadResource}"/>.</param>
     /// <param name="teamRoot">Absolute path to the workspace root (the directory that contains the <c>.squad/</c> folder).</param>
     /// <returns>The <see cref="IResourceBuilder{SquadResource}"/> for further configuration.</returns>
+    [Obsolete("TeamRoot must be set at construction time. Use AddSquad(name, teamRoot: \"...\") instead.", error: true)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static IResourceBuilder<SquadResource> WithTeamRoot(
         this IResourceBuilder<SquadResource> builder,
         string teamRoot)
@@ -202,7 +205,7 @@ public static class SquadBuilderExtensions
         // In practice, consumers should set teamRoot via AddSquad's optional parameter.
         // We cannot mutate the SquadResource after construction (TeamRoot is get-only).
         throw new InvalidOperationException(
-            "TeamRoot cannot be changed after resource creation. Set it via AddSquad(name, teamRoot: \"...\").");
+            "TeamRoot cannot be changed after resource creation. Use AddSquad(name, teamRoot: \"...\") instead.");
     }
 
     /// <summary>
@@ -221,6 +224,7 @@ public static class SquadBuilderExtensions
     /// Always thrown in v1.0. See the CommunityToolkit/Aspire GitHub repository
     /// for the v1.1 process-spawning roadmap.
     /// </exception>
+    [Experimental("SQUAD001", UrlFormat = "https://github.com/tamirdresher/Aspire-1/pull/1")]
     public static IResourceBuilder<SquadResource> WithSquadCli(
         this IResourceBuilder<SquadResource> builder,
         string? cliPath = null,
@@ -228,8 +232,8 @@ public static class SquadBuilderExtensions
         bool waitForReady = true)
     {
         throw new NotImplementedException(
-            "Process spawning is planned for v1.1+; for now the Squad CLI must be started externally. " +
-            "See https://github.com/CommunityToolkit/Aspire for the v1.1 roadmap.");
+            "WithSquadCli is a preview stub (SQUAD001). Process spawning will land in v0.2. " +
+            "See https://github.com/tamirdresher/Aspire-1/pull/1 for design.");
     }
 
     private static LaunchResult LaunchCopilotCli(string squadName, string teamRoot)

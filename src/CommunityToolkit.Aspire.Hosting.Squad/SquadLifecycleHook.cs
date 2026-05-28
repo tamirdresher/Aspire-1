@@ -10,8 +10,8 @@ namespace Aspire.Hosting;
 /// Manages the Squad agent team lifecycle as a .NET Aspire application event subscriber.
 ///
 /// <list type="bullet">
-///   <item><description><b>BeforeStart:</b> publishes the <c>Spawning</c> state on each <see cref="SquadResource"/>.</description></item>
-///   <item><description><b>AfterResourcesCreated:</b> transitions each squad to <c>Active</c>.</description></item>
+///   <item><description><b>BeforeStart:</b> publishes the <c>Starting</c> state on each <see cref="SquadResource"/>.</description></item>
+///   <item><description><b>AfterResourcesCreated:</b> transitions each squad to <c>Running</c>.</description></item>
 ///   <item><description><b>ResourceStopped:</b> transitions stopped Squad resources to <c>Finished</c>.</description></item>
 /// </list>
 /// </summary>
@@ -19,11 +19,6 @@ internal sealed class SquadLifecycleHook : IDistributedApplicationEventingSubscr
 {
     private readonly ILogger<SquadLifecycleHook> _logger;
     private readonly ResourceNotificationService _notifications;
-
-    // Known Aspire dashboard state styles (mirrors KnownResourceStateStyles names).
-    private const string StateSpawning = "Spawning";
-    private const string StateActive = "Active";
-    private const string StateStopped = "Finished";
 
     public SquadLifecycleHook(
         ILogger<SquadLifecycleHook> logger,
@@ -62,7 +57,7 @@ internal sealed class SquadLifecycleHook : IDistributedApplicationEventingSubscr
         {
             return _notifications.PublishUpdateAsync(squad, s => s with
             {
-                State = new ResourceStateSnapshot(StateStopped, KnownResourceStateStyles.Info),
+                State = new ResourceStateSnapshot(KnownResourceStates.Finished, KnownResourceStateStyles.Info),
             });
         }
 
@@ -80,10 +75,10 @@ internal sealed class SquadLifecycleHook : IDistributedApplicationEventingSubscr
 
         foreach (var squad in squads)
         {
-            // Publish the squad resource as Spawning before it becomes Active.
+            // Publish the squad resource as Starting before it becomes Running.
             await _notifications.PublishUpdateAsync(squad, s => s with
             {
-                State = new ResourceStateSnapshot(StateSpawning, KnownResourceStateStyles.Info),
+                State = new ResourceStateSnapshot(KnownResourceStates.Starting, KnownResourceStateStyles.Info),
                 Properties =
                 [
                     new ResourcePropertySnapshot("squad.teamRoot", squad.TeamRoot),
@@ -94,7 +89,7 @@ internal sealed class SquadLifecycleHook : IDistributedApplicationEventingSubscr
             });
 
             _logger.LogInformation(
-                "Squad '{Name}' is Spawning - {AgentCount} agent(s) discovered: {Agents}",
+                "Squad '{Name}' is Starting - {AgentCount} agent(s) discovered: {Agents}",
                 squad.Name, squad.Agents.Count, string.Join(", ", squad.Agents));
         }
     }
@@ -108,11 +103,11 @@ internal sealed class SquadLifecycleHook : IDistributedApplicationEventingSubscr
 
         foreach (var squad in squads)
         {
-            _logger.LogInformation("Squad '{Name}' is Active - {AgentCount} agent(s) ready.", squad.Name, squad.Agents.Count);
+            _logger.LogInformation("Squad '{Name}' is Running - {AgentCount} agent(s) ready.", squad.Name, squad.Agents.Count);
 
             await _notifications.PublishUpdateAsync(squad, s => s with
             {
-                State = new ResourceStateSnapshot(StateActive, KnownResourceStateStyles.Success),
+                State = new ResourceStateSnapshot(KnownResourceStates.Running, KnownResourceStateStyles.Success),
                 Properties =
                 [
                     new ResourcePropertySnapshot("squad.teamRoot", squad.TeamRoot),

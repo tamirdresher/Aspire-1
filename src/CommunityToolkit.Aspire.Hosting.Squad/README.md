@@ -13,8 +13,7 @@ dotnet add package CommunityToolkit.Aspire.Hosting.Squad --prerelease
 In your AppHost:
 
 ```csharp
-var squad = builder.AddSquad("squad")
-    .WithTeamRoot("../my-team");
+var squad = builder.AddSquad("squad", teamRoot: "../my-team");
 
 var api = builder.AddProject<Projects.MyApi>("api")
     .WithReference(squad);
@@ -41,8 +40,15 @@ The resource ships 4 dashboard commands:
 ## What v1.0 does NOT do
 
 Process spawning — the Squad CLI must be started externally. `WithSquadCli()`
-is present as a stub that throws `NotImplementedException` and signals the
-v1.1+ roadmap. See the linked tracking issue.
+is present as a preview stub marked `[Experimental("SQUAD001")]`. It throws
+`NotImplementedException` at runtime. To use it (for future-proofing your code):
+
+```csharp
+#pragma warning disable SQUAD001
+var squad = builder.AddSquad("squad", teamRoot: "../my-team")
+    .WithSquadCli();  // Preview stub - will work in v0.2
+#pragma warning restore SQUAD001
+```
 
 ## Connection-string wire format (Hybrid)
 
