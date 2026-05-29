@@ -55,5 +55,13 @@
     <!-- Snappier 1.0.0 transitive via Aspire.Hosting.MongoDB; cannot bump without Aspire SDK update -->
     <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-pggp-6c3x-2xmx" />
     <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-838x-pcvx-6p5w" />
+    <!-- OpenTelemetry.Exporter.OpenTelemetryProtocol 1.15.1 advisories; cannot bump OTel further until
+         instrumentation packages (Http, Runtime) publish matching versions -->
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-4625-4j76-fww9" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-mr8r-92fq-pj8p" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-q834-8qmm-v933" />
+    <!-- System.Security.Cryptography.Xml 8.0.2 transitive via Hosting.PowerShell; cannot bump without PowerShell SDK update -->
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-37gx-xxp4-5rgx" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-w3x6-4m5h-cxqf" />
   </ItemGroup>
 </Project>
