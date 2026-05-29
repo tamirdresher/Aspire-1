@@ -16,7 +16,7 @@
     <AspirePreviewSuffix>-preview.1.26170.3</AspirePreviewSuffix>
     <AspNetCoreVersion>9.0.0</AspNetCoreVersion>
     <DotNetExtensionsVersion>10.0.5</DotNetExtensionsVersion>
-    <OpenTelemetryVersion>1.15.3</OpenTelemetryVersion>
+    <OpenTelemetryVersion>1.15.1</OpenTelemetryVersion>
     <TestContainersVersion>4.8.1</TestContainersVersion>
     <MEAIVersion>10.0.0</MEAIVersion>
     <ServiceDiscoveryVersion>10.0.0</ServiceDiscoveryVersion>
@@ -48,5 +48,12 @@
 
   <ItemGroup>
     <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-4mjw-xr5x-prpc" />
+    <!-- OpenTelemetry.Api < 1.15.3 is vulnerable but 1.15.3 instrumentation packages (Http, Runtime) don't exist yet -->
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-g94r-2vxg-569j" />
+    <!-- SharpCompress 0.30.1 transitive via Aspire.Hosting.MongoDB; cannot bump without Aspire SDK update -->
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-6c8g-7p36-r338" />
+    <!-- Snappier 1.0.0 transitive via Aspire.Hosting.MongoDB; cannot bump without Aspire SDK update -->
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-pggp-6c3x-2xmx" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-838x-pcvx-6p5w" />
   </ItemGroup>
 </Project>
