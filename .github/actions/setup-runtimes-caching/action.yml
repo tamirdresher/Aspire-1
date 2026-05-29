@@ -35,7 +35,7 @@ runs:
         python -m pip install --upgrade pip
         pip install uvicorn
 
-    -     uses: astral-sh/setup-uv@v8
+    - uses: astral-sh/setup-uv@v8
       name: Install uv
       with:
         enable-cache: false
@@ -53,7 +53,7 @@ runs:
         distribution: "microsoft"
         java-version: "21"
 
-    -     uses: actions/setup-node@v6
+    - uses: actions/setup-node@v6
       name: Set up Node.js
       with:
         node-version: "latest"
@@ -68,7 +68,7 @@ runs:
       with:
         bun-version: latest
 
-    -     uses: actions/cache@v5
+    - uses: actions/cache@v5
       name: Cache NuGet packages
       with:
         path: ~/.nuget/packages
@@ -124,7 +124,7 @@ runs:
         dapr init --runtime-version=${{ env.DAPR_VERSION }}
         dapr --version
 
-    -     uses: ai-action/setup-ollama@v2
+    - uses: ai-action/setup-ollama@v2
       name: Setup Ollama
       if: ${{ inputs.name == 'Full' || contains(inputs.name, 'Hosting.Ollama') }}
       with:
