@@ -37,6 +37,10 @@ The resource ships 4 dashboard commands:
 - **open-copilot-cli** — opens a terminal with `copilot`
 - **check-inbox** — lists `.squad/decisions/inbox/`
 
+## Configuration
+
+The `teamRoot` parameter is required when calling `AddSquad`. It must be an absolute path to the directory containing the `.squad/` folder.
+
 ## What v1.0 does NOT do
 
 Process spawning — the Squad CLI must be started externally. `WithSquadCli()`

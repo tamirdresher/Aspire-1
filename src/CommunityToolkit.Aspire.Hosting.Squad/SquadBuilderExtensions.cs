@@ -25,7 +25,7 @@ public static class SquadBuilderExtensions
     /// <param name="name">The Aspire resource name.</param>
     /// <param name="teamRoot">
     /// Absolute path to the workspace root - the directory that contains the <c>.squad/</c> folder.
-    /// Defaults to <see cref="Directory.GetCurrentDirectory"/> when not specified.
+    /// This parameter is required.
     /// </param>
     /// <returns>An <see cref="IResourceBuilder{SquadResource}"/> for further configuration.</returns>
     /// <example>
@@ -44,12 +44,13 @@ public static class SquadBuilderExtensions
     public static IResourceBuilder<SquadResource> AddSquad(
         this IDistributedApplicationBuilder builder,
         [ResourceName] string name,
-        string? teamRoot = null)
+        string teamRoot)
     {
         ArgumentNullException.ThrowIfNull(builder);
         ArgumentException.ThrowIfNullOrEmpty(name);
+        ArgumentException.ThrowIfNullOrEmpty(teamRoot);
 
-        var resolvedRoot = teamRoot ?? Directory.GetCurrentDirectory();
+        var resolvedRoot = teamRoot;
 
         var resource = new SquadResource(name, resolvedRoot);
 
@@ -184,28 +185,6 @@ public static class SquadBuilderExtensions
             });
 
         return resourceBuilder;
-    }
-
-    /// <summary>
-    /// Sets the team root path for the Squad resource.
-    /// </summary>
-    /// <param name="builder">The <see cref="IResourceBuilder{SquadResource}"/>.</param>
-    /// <param name="teamRoot">Absolute path to the workspace root (the directory that contains the <c>.squad/</c> folder).</param>
-    /// <returns>The <see cref="IResourceBuilder{SquadResource}"/> for further configuration.</returns>
-    [Obsolete("TeamRoot must be set at construction time. Use AddSquad(name, teamRoot: \"...\") instead.", error: true)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public static IResourceBuilder<SquadResource> WithTeamRoot(
-        this IResourceBuilder<SquadResource> builder,
-        string teamRoot)
-    {
-        ArgumentNullException.ThrowIfNull(builder);
-        ArgumentException.ThrowIfNullOrEmpty(teamRoot);
-
-        // Team root is set on construction; this method exists for fluent API consistency.
-        // In practice, consumers should set teamRoot via AddSquad's optional parameter.
-        // We cannot mutate the SquadResource after construction (TeamRoot is get-only).
-        throw new InvalidOperationException(
-            "TeamRoot cannot be changed after resource creation. Use AddSquad(name, teamRoot: \"...\") instead.");
     }
 
     /// <summary>

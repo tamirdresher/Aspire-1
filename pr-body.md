@@ -13,7 +13,7 @@
 ## What's in v1.0
 
 - `SquadResource` — team-root + agent discovery
-- `SquadBuilderExtensions` — `AddSquad`, `WithTeamRoot`, 4 dashboard commands (refresh-agents, open-team-root, open-copilot-cli, check-inbox)
+- `SquadBuilderExtensions` — `AddSquad` (with mandatory `teamRoot` parameter), 4 dashboard commands (refresh-agents, open-team-root, open-copilot-cli, check-inbox)
 - `WithSquadCli()` — STUB throws `NotImplementedException`; reserved for v1.1+ process spawning
 - Hybrid PATH+URI connection-string emission with AFCP comment
 - README.md with Aspire-injected config pattern (Decision 384)
@@ -43,7 +43,7 @@
 3. Verify build success (zero warnings).
 
 4. (Full loop test — requires Track A `Squad.Agents.AI` NuGet):
-   - Create a minimal AppHost that calls `builder.AddSquad("squad").WithTeamRoot("...")`
+   - Create a minimal AppHost that calls `builder.AddSquad("squad", teamRoot: "...")`
    - Reference the built DLL from the AppHost
    - Run the AppHost: `dotnet run --project path/to/AppHost`
    - Verify the Aspire dashboard shows the `squad` resource
