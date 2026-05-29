@@ -35,7 +35,7 @@ runs:
         python -m pip install --upgrade pip
         pip install uvicorn
 
-    - uses: astral-sh/setup-uv@v8
+    - uses: astral-sh/setup-uv@v8.1.0
       name: Install uv
       with:
         enable-cache: false
