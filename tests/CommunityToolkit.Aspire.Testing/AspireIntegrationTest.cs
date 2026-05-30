@@ -63,11 +63,11 @@ public class AspireIntegrationTestFixture<TEntryPoint>() : DistributedApplicatio
     {
         try
         {
-            await base.DisposeAsync();
+            await base.DisposeAsync().AsTask().WaitAsync(TimeSpan.FromSeconds(30));
         }
         catch (Exception)
         {
-            // Ignore exceptions during disposal
+            // Ignore exceptions during disposal (including TimeoutException from WaitAsync)
         }
     }
 

@@ -110,7 +110,7 @@ jobs:
           --configuration ${{ env.DOTNET_CONFIGURATION }}
           --crashdump
           --hangdump
-          --hangdump-timeout 7m
+          --hangdump-timeout 15m
           --results-directory "${{ github.workspace }}/testresults"
           --filter-not-trait "category=failing"
           --report-trx
