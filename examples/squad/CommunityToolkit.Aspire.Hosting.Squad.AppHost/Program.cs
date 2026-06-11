@@ -28,8 +28,30 @@ var devSquadRoot      = Path.Combine(builder.AppHostDirectory, "dev-squad");
 
 // 1) Two logical Squad resources, each surfaces in the dashboard as its own row
 //    with the per-agent roster discovered from .squad/team.md.
-var researchSquad = builder.AddSquad("research-squad", teamRoot: researchSquadRoot);
-var devSquad      = builder.AddSquad("dev-squad",      teamRoot: devSquadRoot);
+//
+//    .WithTerminal(...) (Aspire 13.5.0-preview API) attaches a PTY-backed terminal
+//    to each squad resource — the dashboard exposes an "Open terminal" affordance
+//    that opens a live `cmd` session in the squad's team root with the Copilot CLI
+//    already running under the squad coordinator. `cmd /K` keeps the shell open
+//    after the CLI exits so the user can type follow-up commands or restart.
+//
+//    Net effect: you can drive each squad either headlessly via the ApiApp's /ask
+//    endpoint (SDK path — produces the OTel spans) OR interactively via the
+//    dashboard terminal (CLI path — same coordinator, same `task` tool dispatch,
+//    just a human-driven session instead of an HTTP-driven one).
+var researchSquad = builder.AddSquad("research-squad", teamRoot: researchSquadRoot)
+    .WithTerminal(o =>
+    {
+        o.Shell = "cmd /K \"copilot --agent squad\"";
+        o.ShowTerminalHost = true;
+    });
+
+var devSquad = builder.AddSquad("dev-squad", teamRoot: devSquadRoot)
+    .WithTerminal(o =>
+    {
+        o.Shell = "cmd /K \"copilot --agent squad\"";
+        o.ShowTerminalHost = true;
+    });
 
 // 2) Downstream project that uses Squad.Agents.AI to drive whichever squad the
 //    caller picks. Both squads are referenced so both connection strings are

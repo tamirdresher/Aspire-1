@@ -1,9 +1,17 @@
-<Project Sdk="Aspire.AppHost.Sdk/13.4.0">
+<Project Sdk="Aspire.AppHost.Sdk/13.5.0-preview.1.26311.2">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <IsAspireHost>true</IsAspireHost>
     <UserSecretsId>5a9c3d6b-1f1e-4f9e-a3ba-7d9e1f3a2b1a</UserSecretsId>
+    <!--
+      ASPIRETERMINAL001 marks TerminalResourceBuilderExtensions.WithTerminal as
+      experimental in Aspire 13.5-preview. The dashboard-PTY surface is still
+      stabilising; suppressing here because this is the experimental side-branch
+      that explicitly opts into the preview API. See
+      https://aka.ms/aspire/diagnostics/ASPIRETERMINAL001.
+    -->
+    <NoWarn>$(NoWarn);ASPIRETERMINAL001</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

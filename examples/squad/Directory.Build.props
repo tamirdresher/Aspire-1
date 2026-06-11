@@ -1,0 +1,23 @@
+<Project>
+  <!--
+    Side-experimental override: bump THIS example folder (only) to Aspire 13.5
+    preview, which is the first version that ships the new
+    TerminalResourceBuilderExtensions.WithTerminal(...) API. The dashboard-hosted
+    PTY terminal lets us run the Copilot CLI with the squad coordinator
+    interactively, inside the dashboard, for each squad resource.
+
+    The integration package itself (src/CommunityToolkit.Aspire.Hosting.Squad)
+    still pins the stable Aspire 13.4.0 release. This override is scoped to the
+    example AppHost + ApiApp + ServiceDefaults so we can prove the WithTerminal
+    flow without bumping the package's own minimum requirement until 13.5 ships
+    stable.
+
+    Import chain note: examples/Directory.Build.props is what sets
+    DefaultTargetFramework => TargetFramework for example projects. We import
+    THAT (not the repo root) so target-framework inheritance keeps working.
+  -->
+  <Import Project="..\Directory.Build.props" />
+  <PropertyGroup>
+    <AspireVersion>13.5.0-preview.1.26311.2</AspireVersion>
+  </PropertyGroup>
+</Project>
