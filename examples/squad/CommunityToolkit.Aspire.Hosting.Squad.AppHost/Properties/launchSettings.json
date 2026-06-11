@@ -10,7 +10,10 @@
         "DOTNET_ENVIRONMENT": "Development",
         "DOTNET_DASHBOARD_OTLP_ENDPOINT_URL": "https://localhost:21277",
         "DOTNET_RESOURCE_SERVICE_ENDPOINT_URL": "https://localhost:22277",
-        "DCP_IDE_REQUEST_TIMEOUT_SECONDS": "300"
+        "DCP_IDE_REQUEST_TIMEOUT_SECONDS": "300",
+        "//": "ASPIRE_TERMINAL_HOST_PATH + INVOCATION_ARGS resolve the 13.5-preview WithTerminal API's terminal-host binary when launching via F5 / dotnet run. When you launch via `aspire run` the CLI sets these automatically. The path points at the bundled aspire-managed.exe inside the locally-installed aspire CLI tool (which is the same SDK preview as the AppHost SDK).",
+        "ASPIRE_TERMINAL_HOST_PATH": "%USERPROFILE%\\.dotnet\\tools\\.store\\aspire.cli\\13.5.0-preview.1.26311.2\\aspire.cli.win-x64\\13.5.0-preview.1.26311.2\\tools\\net10.0\\win-x64\\bundle\\managed\\aspire-managed.exe",
+        "ASPIRE_TERMINAL_HOST_INVOCATION_ARGS": "terminalhost"
       }
     }
   }
