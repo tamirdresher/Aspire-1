@@ -32,8 +32,18 @@ var devSquadRoot      = Path.Combine(builder.AppHostDirectory, "dev-squad");
 //    .WithTerminal(...) (Aspire 13.5.0-preview API) attaches a PTY-backed terminal
 //    to each squad resource — the dashboard exposes an "Open terminal" affordance
 //    that opens a live `cmd` session in the squad's team root with the Copilot CLI
-//    already running under the squad coordinator. `cmd /K` keeps the shell open
-//    after the CLI exits so the user can type follow-up commands or restart.
+//    already running under the squad coordinator.
+//
+//      cmd /K          keeps the shell alive after the CLI exits so the user can
+//                      type follow-up commands or restart copilot without losing
+//                      the dashboard terminal pane.
+//      copilot         the GitHub Copilot CLI.
+//      --agent squad   loads .github/agents/squad.agent.md as the agent definition
+//                      so the coordinator behaves as the Squad team's coordinator.
+//      --yolo          omnibus permission opener: --allow-all-tools +
+//                      --allow-all-paths + --allow-all-urls. Required for the
+//                      coordinator to actually fan out via the task tool without
+//                      a per-tool permission prompt blocking the demo.
 //
 //    Net effect: you can drive each squad either headlessly via the ApiApp's /ask
 //    endpoint (SDK path — produces the OTel spans) OR interactively via the
@@ -42,14 +52,14 @@ var devSquadRoot      = Path.Combine(builder.AppHostDirectory, "dev-squad");
 var researchSquad = builder.AddSquad("research-squad", teamRoot: researchSquadRoot)
     .WithTerminal(o =>
     {
-        o.Shell = "cmd /K \"copilot --agent squad\"";
+        o.Shell = "cmd /K \"copilot --agent squad --yolo\"";
         o.ShowTerminalHost = true;
     });
 
 var devSquad = builder.AddSquad("dev-squad", teamRoot: devSquadRoot)
     .WithTerminal(o =>
     {
-        o.Shell = "cmd /K \"copilot --agent squad\"";
+        o.Shell = "cmd /K \"copilot --agent squad --yolo\"";
         o.ShowTerminalHost = true;
     });
 
