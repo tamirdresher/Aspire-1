@@ -26,6 +26,38 @@ var builder = DistributedApplication.CreateBuilder(args);
 var researchSquadRoot = Path.Combine(builder.AppHostDirectory, "research-squad");
 var devSquadRoot      = Path.Combine(builder.AppHostDirectory, "dev-squad");
 
+// Make each squad folder look like its own git repo so the Copilot CLI resolves
+// .github/agents/squad.agent.md from the squad folder (not from the surrounding
+// Aspire-1 repo root, which has different .github/agents files). The CLI walks
+// upward looking for a .git directory; without this, it climbs out of the squad
+// folder and loads the wrong agent set.
+//
+// We scaffold a minimum-viable .git/ (HEAD + config + objects/ + refs/) at
+// AppHost startup rather than committing one. Two reasons:
+//
+//   1. Git silently skips nested .git directories when walking a parent repo,
+//      so we *cannot* commit a real `.git/` here — it would be invisible to
+//      anyone cloning the example.
+//
+//   2. A workaround that ships a tracked `.git-template/` folder copied at
+//      startup works but adds noise to the repo tree, shows up in IDE file
+//      explorers, and risks confusing tooling that pattern-matches on the
+//      string ".git" in path names.
+//
+// Generating at runtime side-steps both: nothing extra in source control, the
+// scaffold appears on first launch, and it's already in each squad's
+// .gitignore so a future "git init" in the squad folder won't trip over it.
+foreach (var squadRoot in new[] { researchSquadRoot, devSquadRoot })
+{
+    var gitDir = Path.Combine(squadRoot, ".git");
+    if (Directory.Exists(gitDir)) { continue; }
+    Directory.CreateDirectory(Path.Combine(gitDir, "objects"));
+    Directory.CreateDirectory(Path.Combine(gitDir, "refs"));
+    File.WriteAllText(Path.Combine(gitDir, "HEAD"), "ref: refs/heads/main\n");
+    File.WriteAllText(Path.Combine(gitDir, "config"),
+        "[core]\n\trepositoryformatversion = 0\n\tfilemode = false\n\tbare = false\n");
+}
+
 // 1) Two logical Squad resources, each surfaces in the dashboard as its own row
 //    with the per-agent roster discovered from .squad/team.md.
 var researchSquad = builder.AddSquad("research-squad", teamRoot: researchSquadRoot);

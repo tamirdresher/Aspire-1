@@ -23,3 +23,7 @@
 *.vbproj
 bin/
 obj/
+
+# Runtime .git/ scaffolded by the AppHost from .git-template/ at first launch.
+# See .git-template/README.md for why this exists.
+.git/
