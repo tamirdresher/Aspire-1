@@ -52,5 +52,7 @@
 
   <ItemGroup>
     <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-4mjw-xr5x-prpc" />
+    <!-- Suppress GHSA-2m69-gcr7-jv3q: no patch available yet (CVSS 9.8) -->
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-2m69-gcr7-jv3q" />
   </ItemGroup>
 </Project>
