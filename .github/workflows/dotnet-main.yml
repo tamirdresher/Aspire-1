@@ -25,6 +25,23 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
+      - name: Free disk space on ubuntu runners
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          echo "=== Disk before cleanup ==="
+          df -h /
+          sudo rm -rf /usr/local/lib/android        # ~14 GB
+          sudo rm -rf /opt/ghc                       # Haskell, ~5 GB
+          sudo rm -rf /opt/hostedtoolcache/CodeQL    # ~5 GB
+          sudo rm -rf /usr/local/share/boost
+          sudo rm -rf /usr/share/swift
+          sudo rm -rf /usr/share/miniconda
+          sudo rm -rf /opt/google/chrome /opt/microsoft/msedge /opt/microsoft/powershell
+          sudo docker image prune -af || true
+          sudo apt-get clean
+          echo "=== Disk after cleanup ==="
+          df -h /
       - name: Setup Runtimes, Caching, and Tools
         uses: ./.github/actions/setup-runtimes-caching
         with:
@@ -37,8 +54,15 @@ jobs:
         run: dotnet restore
       - name: Build
         run: dotnet build --no-restore --configuration ${{ env.DOTNET_CONFIGURATION }}
+        env:
+          DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+      - name: Disk usage after build (Linux)
+        if: runner.os == 'Linux' && always()
+        shell: bash
+        run: df -h /
 
   run-tests:
+    if: github.repository == 'CommunityToolkit/Aspire'
     uses: ./.github/workflows/tests.yaml
     secrets: inherit
 
@@ -47,10 +71,11 @@ jobs:
     with:
       version_suffix: "beta.${{ github.run_number }}"
     needs: run-tests
-    if: ${{ github.actor != 'dependabot[bot]' }}
+    if: ${{ github.actor != 'dependabot[bot]' && github.repository == 'CommunityToolkit/Aspire' }}
 
   sign:
     needs: package
+    if: github.repository == 'CommunityToolkit/Aspire'
     runs-on: windows-latest
     permissions:
       id-token: write # Required for requesting the JWT
@@ -108,7 +133,7 @@ jobs:
       name: nuget-beta
     # Only run publish when the merged PR does NOT contain the skip label.
     # The label name is configurable via the `SKIP_PUBLISH_LABEL` env in the detector job below.
-    if: needs.detect-pr-label.outputs.skip_publish != 'true'
+    if: needs.detect-pr-label.outputs.skip_publish != 'true' && github.repository == 'CommunityToolkit/Aspire'
     steps:
       - name: Download package
         uses: actions/download-artifact@v8
@@ -124,7 +149,7 @@ jobs:
     environment:
       name: azure-artifacts
     # Skip pushing to Azure Artifacts when the merged PR requested skipping the publish.
-    if: needs.detect-pr-label.outputs.skip_publish != 'true'
+    if: needs.detect-pr-label.outputs.skip_publish != 'true' && github.repository == 'CommunityToolkit/Aspire'
     steps:
       - name: Download package
         uses: actions/download-artifact@v8
@@ -148,7 +173,7 @@ jobs:
           --skip-duplicate
 
   publish-coverage:
-    if: github.actor != 'dependabot[bot]'
+    if: github.actor != 'dependabot[bot]' && github.repository == 'CommunityToolkit/Aspire'
     needs: run-tests
     uses: ./.github/workflows/code-coverage.yml
     secrets: inherit
