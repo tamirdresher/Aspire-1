@@ -1,0 +1,19 @@
+name: Geordi JS Ext Dispatch (experiment)
+
+on:
+  workflow_dispatch:
+    inputs:
+      selected:
+        description: JSON array of test project names
+        required: false
+        type: string
+        default: '["Hosting.JavaScript.Extensions.Tests"]'
+
+jobs:
+  run:
+    permissions:
+      contents: read
+    uses: ./.github/workflows/tests.yaml
+    with:
+      selected-tests: ${{ inputs.selected }}
+    secrets: inherit
