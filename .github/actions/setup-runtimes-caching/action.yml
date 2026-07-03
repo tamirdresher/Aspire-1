@@ -88,7 +88,7 @@ runs:
     - name: Refresh Corepack
       shell: bash
       run: |
-        npm i -g corepack@latest
+        npm i -g --force corepack@latest
         corepack --version
 
     - uses: denoland/setup-deno@v2
