@@ -83,7 +83,13 @@ runs:
     - uses: actions/setup-node@v4
       name: Set up Node.js
       with:
-        node-version: "latest"
+        node-version: "22.22.2"
+
+    - name: Refresh Corepack
+      shell: bash
+      run: |
+        npm i -g corepack@latest
+        corepack --version
 
     - uses: denoland/setup-deno@v2
       name: Setup Deno
