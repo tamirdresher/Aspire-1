@@ -1,6 +1,10 @@
 name: Geordi JS Ext Dispatch (experiment)
 
 on:
+  push:
+    branches:
+      - geordi/ci-experiment-baseline
+      - geordi/ci-experiment-fix
   workflow_dispatch:
     inputs:
       selected:
