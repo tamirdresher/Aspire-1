@@ -145,5 +145,9 @@
     <PackageVersion Include="MongoDB.Driver" Version="3.8.1" />
     <!-- Override to address  https://github.com/advisories/GHSA-6c8g-7p36-r338 -->
     <PackageVersion Include="SharpCompress" Version="1.0.0" />
+    <!-- Override to address CVE-2025-6965 / GHSA-2m69-gcr7-jv3q (SQLitePCLRaw memory corruption) -->
+    <!-- 2.x versions are all vulnerable; 3.x is a major-version upgrade — verify runtime compat before merge -->
+    <!-- Transitive chain: Microsoft.Data.Sqlite 10.0.2 + Microsoft.EntityFrameworkCore.Sqlite 10.0.2 -->
+    <PackageVersion Include="SQLitePCLRaw.lib.e_sqlite3" Version="3.53.3" />
   </ItemGroup>
 </Project>
