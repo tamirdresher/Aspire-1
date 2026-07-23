@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\CommunityToolkit.Aspire.Microsoft.Data.Sqlite\CommunityToolkit.Aspire.Microsoft.Data.Sqlite.csproj" />
@@ -7,6 +7,10 @@
 
   <ItemGroup>
     <PackageReference Include="MessagePack" />
+    <!-- Force SQLitePCLRaw.lib.e_sqlite3 >= 3.53.3 to address CVE-2025-6965 / GHSA-2m69-gcr7-jv3q.
+         Belt-and-suspenders alongside the src project fix; ensures NU1903 does not
+         fire even if NuGet evaluates the test project's graph independently. -->
+    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" />
   </ItemGroup>
 
 </Project>
