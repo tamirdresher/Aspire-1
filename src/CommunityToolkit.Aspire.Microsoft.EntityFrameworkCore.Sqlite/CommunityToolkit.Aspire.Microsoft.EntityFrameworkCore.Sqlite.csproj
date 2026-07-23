@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <AdditionalPackageTags>client sqlite data EntityFrameworkCore entity-framework-core ef orm</AdditionalPackageTags>
@@ -35,6 +35,10 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" />
     <PackageReference Include="OpenTelemetry.Extensions.Hosting" />
     <PackageReference Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" />
+    <!-- Force SQLitePCLRaw.lib.e_sqlite3 >= 3.53.3 to address CVE-2025-6965 / GHSA-2m69-gcr7-jv3q.
+         CPM PackageVersion in Directory.Packages.props does not override transitive dependencies;
+         an explicit PackageReference is required to force the version across all TFMs (net8/9/10). -->
+    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" />
   </ItemGroup>
 
   <ItemGroup>
